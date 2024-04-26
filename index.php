@@ -1,13 +1,26 @@
 <?php
+session_start();
 require_once("conexion.php");
+<<<<<<< HEAD
 session_start();
 $_SESSION["temporal_user"]=1;
+=======
+
+>>>>>>> 656f3989c840805c9582c2286f89d579b0442b58
 $sql = "select * from product";
 $consulta = $conn->prepare($sql);
 // Ejecutar la consulta
 $consulta->execute();
 // Obtener los resultados
 $resultados = $consulta->fetchAll(PDO::FETCH_ASSOC);
+//Compruebo si hay carrito
+if (isset($_SESSION["user"])) {
+    //comprobaria si hay carrito en la bbdd
+} else {
+    if (isset($_SESSION["cart"])) {
+        $cart = $_SESSION["cart"];
+    }
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -25,13 +38,43 @@ $resultados = $consulta->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>
-    <div class="container contenedor-productos row">
-    <h3>Productos</h3>
 
-    <?php
-    // Mostrar los resultados
-    foreach ($resultados as $product) {
-        echo '<div class="card productcard col-md-3 col-sm-12" ">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Mi Tienda</a>
+            <div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contacto</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container contenedor-productos row">
+        <div class="shop-cart">
+
+            <a class="nav-link" href="#"><span><i class="fas fa-shopping-cart"></i><?php echo isset($cart) ? count($cart) : ''; ?> </span></a>
+
+        </div>
+        <h3>Productos</h3>
+
+        <?php
+        // Mostrar los resultados
+        foreach ($resultados as $product) {
+            echo '<div class="card productcard col-md-3 col-sm-12" ">
         <img src="assets/product/' . $product["image"] . '" class="card-img-top" alt="...">
         <div class="card-body">
         <div class="producto-detalle">
@@ -43,15 +86,20 @@ $resultados = $consulta->fetchAll(PDO::FETCH_ASSOC);
                 <h5 class="card-title">' . $product["price"] . '€/kg</h5>
             </div>
           </div>
+          <form action="add_to_cart.php" method="get">
           <div class="add-to-cart">
-            <input class="form-control" type="number" name="" id="">
-            <a href="#" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
+            <input type="hidden" name="idproduct" value="' . $product["idproduct"] . '">
+            <input min=1 step=1 class="form-control" type="number" name="quantity" id="" required >
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></button>
           </div>
+          </form>
         </div>
       </div>';
-    }
-    ?>
-     </div>
+        }
+        ?>
+    </div>
+
+
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
