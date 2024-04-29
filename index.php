@@ -1,7 +1,12 @@
 <?php
 session_start();
 require_once("conexion.php");
+<<<<<<< HEAD
+session_start();
+$_SESSION["temporal_user"]=1;
+=======
 
+>>>>>>> 656f3989c840805c9582c2286f89d579b0442b58
 $sql = "select * from product";
 $consulta = $conn->prepare($sql);
 // Ejecutar la consulta
